@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import styled, { keyframes } from "styled-components";
-import imgl1 from "./images/L1.jpg";
-import imgl2 from "./images/L2.jpg";
-import imgl3 from "./images/L3.jpg";
+import imgl1 from "../assets/L1.jpg";
+import imgl2 from "../assets/L2.jpg";
+import imgl3 from "../assets/L3.jpg";
 
 // Spinner fade animation
 const fade = keyframes`
