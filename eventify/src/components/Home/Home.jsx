@@ -29,7 +29,7 @@ const HomeCont = styled.div`
   height: 100vh;
   color: white;
   padding: 0rem;
-  background-image: url("../public/images/eve3.jpg");
+  background-image: url("../images/eve3.jpg");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
