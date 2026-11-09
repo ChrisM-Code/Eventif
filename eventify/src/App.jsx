@@ -13,7 +13,7 @@ const MapComponent = lazy(() =>
 );
 
 const EventPro = lazy(() => import("./components/Events/EventPro"));
-const Dashboard = lazy(() => import("./components/Home/Dashboard"));
+// const Dashboard = lazy(() => import("./components/Home/Dashboard"));
 
 const App = () => {
   const [selectedEvent, setSelectedEvent] = useState(null);

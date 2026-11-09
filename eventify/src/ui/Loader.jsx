@@ -1,12 +1,5 @@
 import { useState, useEffect } from "react";
 import styled, { keyframes } from "styled-components";
-<<<<<<< HEAD
-import imgl1 from "../ui/Images/L1.jpg";
-import imgl2 from "../ui/Images/L2.jpg";
-import imgl3 from "../ui/Images/L3.jpg";
-=======
->>>>>>> 6c3afdb (refactor: improve global UI styling and application layout)
-
 import imgl1 from "./images/L1.jpg";
 import imgl2 from "./images/L2.jpg";
 import imgl3 from "./images/L3.jpg";
