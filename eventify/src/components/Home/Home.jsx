@@ -35,12 +35,6 @@ const HomeCont = styled.section`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-<<<<<<< HEAD
-  height: 100vh;
-  color: white;
-  padding: 0rem;
-  background-image: url("../images/eve3.jpg");
-=======
 
   width: 100%;
   min-height: calc(100vh - 70px);
@@ -54,7 +48,6 @@ const HomeCont = styled.section`
     ),
     url("/images/eve3.jpg");
 
->>>>>>> 6c3afdb (refactor: improve global UI styling and application layout)
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
