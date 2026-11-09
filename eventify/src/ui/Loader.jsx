@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import styled, { keyframes } from "styled-components";
-import imgl1 from "./Images/L1.jpg";
-import imgl2 from "./Images/L2.jpg";
-import imgl3 from "./Images/L3.jpg";
+import imgl1 from "../ui/Images/L1.jpg";
+import imgl2 from "../ui/Images/L2.jpg";
+import imgl3 from "../ui/Images/L3.jpg";
 
 // Keep images outside component
 const loaderImages = [imgl1, imgl2, imgl3];
