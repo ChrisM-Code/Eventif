@@ -52,7 +52,7 @@ const App = () => {
               <Route path="directions" element={<Directions />} />
               <Route path="map" element={<MapComponent />} />
             </Route>
-            <Route path="/dashboard" element={<Dashboard />} />
+            {/* <Route path="/dashboard" element={<Dashboard />} /> */}
           </Routes>
         </Suspense>
       </MapProvider>
