@@ -1,129 +1,171 @@
 import styled, { keyframes } from "styled-components";
 import { useState, useEffect } from "react";
+
 import About from "../About/About";
 import Events from "../Events/Events";
 import Directions from "../Directions/Directions";
 
 const fadeIn = keyframes`
-  0% { opacity: 0; transform: translateY(-20px); }
-  100% { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 `;
 
-const bounce = keyframes`
-  0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-  40% { transform: translateY(-1px); }
-  60% { transform: translateY(-5px); }
+const float = keyframes`
+  0%, 100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-6px);
+  }
 `;
 
-const slideInOut = keyframes`
-  0% { transform: translateX(-100%); opacity: 0; }
-  50% { transform: translateX(0); opacity: 1; }
-  100% { transform: translateX(100%); opacity: 0; }
-`;
+const HomeCont = styled.section`
+  position: relative;
+  isolation: isolate;
 
-const HomeCont = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+<<<<<<< HEAD
   height: 100vh;
   color: white;
   padding: 0rem;
   background-image: url("../images/eve3.jpg");
+=======
+
+  width: 100%;
+  min-height: calc(100vh - 70px);
+  padding: 5rem 1.5rem;
+
+  overflow: hidden;
+  background-image: linear-gradient(
+      135deg,
+      rgba(8, 15, 28, 0.82),
+      rgba(8, 15, 28, 0.48)
+    ),
+    url("/images/eve3.jpg");
+
+>>>>>>> 6c3afdb (refactor: improve global UI styling and application layout)
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
 
-  // @media (max-width: 768px) {
-  //   height: auto;
-  //   background-size: cover;
-  //   background-position: center;
-  //   padding: 2rem 1rem;
-  // }
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(180deg, transparent 65%, rgba(0, 0, 0, 0.25));
+  }
+
+  @media (max-width: 768px) {
+    min-height: 75vh;
+    padding: 4rem 1rem;
+    background-position: center;
+  }
 `;
 
 const MainContent = styled.div`
+  width: 100%;
+  max-width: 850px;
+  margin: 0 auto;
   text-align: center;
-  margin-top: 1rem;
-  width: 90%;
-  max-width: 600px;
+  animation: ${fadeIn} 1s ease both;
 
   h1 {
-    font-size: 3rem;
-    font-weight: bold;
-    margin-bottom: 1rem;
-    margin-top: 0.5rem;
+    color: #ffffff;
+    font-size: clamp(2.3rem, 6vw, 4.8rem);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -1.5px;
+    margin: 0 0 1.3rem;
 
-    animation: ${bounce} 2s infinite;
-
-    @media (max-width: 768px) {
-      font-size: 2rem;
-      font-weight: bold;
-    }
+    animation: ${float} 4s ease-in-out infinite;
 
     span {
-      color: #451a03;
+      color: ${({ theme }) => theme.accent};
     }
   }
 
   p {
-    font-size: 1.2rem;
-    line-height: 1.6;
-    animation: ${slideInOut} 4s ease-in-out;
+    max-width: 650px;
+    margin: 0 auto;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    line-height: 1.8;
+  }
 
-    @media (max-width: 768px) {
-      font-size: 1rem;
+  @media (max-width: 768px) {
+    h1 {
+      letter-spacing: -0.5px;
     }
   }
 `;
 
 const DateStamp = styled.div`
   position: absolute;
-  bottom: 1rem;
-  right: 1rem;
-  font-size: 1rem;
-  color: white;
-  background: rgba(0, 0, 0, 0.7);
-  padding: 0.6rem 1.2rem;
-  border-radius: 8px;
-  animation: ${fadeIn} 2.5s ease-in-out;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
-  transition: transform 0.3s ease, background 0.3s ease;
+  bottom: 1.5rem;
+  right: 1.5rem;
 
-  &:hover {
-    background: #fb923c;
-    color: black;
-    transform: scale(1);
-    box-shadow: 0px 6px 8px rgba(0, 0, 0, 0.5);
-  }
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+
+  padding: 0.65rem 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+
+  color: #ffffff;
+  background: rgba(8, 15, 28, 0.72);
+  backdrop-filter: blur(12px);
+
+  font-size: 0.85rem;
+  font-weight: 500;
+
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+  animation: ${fadeIn} 1.5s ease both;
 
   @media (max-width: 768px) {
-    font-size: 0.85rem;
-    padding: 0.4rem 0.8rem;
-    bottom: 0.5rem;
-    right: 0.5rem;
+    bottom: 1rem;
+    right: 50%;
+    transform: translateX(50%);
+    width: max-content;
+    max-width: calc(100% - 2rem);
+    font-size: 0.75rem;
   }
 `;
 
-function Home() {
+const Home = () => {
   const [currentDate, setCurrentDate] = useState("");
 
   useEffect(() => {
     const updateDate = () => {
       const now = new Date();
-      const formattedDate = now.toLocaleString("en-US", {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-        hour: "2-digit",
-        minute: "2-digit",
-        second: "2-digit",
-        hour12: false,
-      });
-      setCurrentDate(formattedDate);
+
+      setCurrentDate(
+        now.toLocaleString("en-KE", {
+          weekday: "short",
+          year: "numeric",
+          month: "short",
+          day: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+          hour12: true,
+        })
+      );
     };
 
     updateDate();
+
     const interval = setInterval(updateDate, 1000);
 
     return () => clearInterval(interval);
@@ -133,16 +175,28 @@ function Home() {
     <>
       <HomeCont>
         <MainContent>
-          <h1>Welcome to Eventify</h1>
-          <p>Your one-stop platform to discover and organize amazing events.</p>
+          <h1>
+            Welcome to <span>Eventify</span>
+          </h1>
+
+          <p>
+            Your one-stop platform to discover, explore, and organize amazing
+            events. Connect with people, experience unforgettable moments, and
+            make every event count.
+          </p>
         </MainContent>
-        <DateStamp>{currentDate}</DateStamp>
+
+        <DateStamp>
+          <span>📅</span>
+          {currentDate}
+        </DateStamp>
       </HomeCont>
+
       <About />
       <Events />
       <Directions />
     </>
   );
-}
+};
 
 export default Home;
