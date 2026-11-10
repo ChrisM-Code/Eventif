@@ -214,7 +214,7 @@ const GlobalStyles = createGlobalStyle`
 
   .theme-button {
     background: ${({ theme }) => theme.accent};
-    color: ${({ theme }) => theme.buttonText};
+    color: ${({ theme }) => theme.buttonText || theme.inverseText};
     border: 1px solid ${({ theme }) => theme.accent};
     border-radius: 8px;
     padding: 10px 18px;

@@ -179,10 +179,7 @@ const Home = () => {
           </p>
         </MainContent>
 
-        <DateStamp>
-          <span>📅</span>
-          {currentDate}
-        </DateStamp>
+        <DateStamp>{currentDate}</DateStamp>
       </HomeCont>
 
       <About />

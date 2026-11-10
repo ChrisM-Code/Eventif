@@ -12,7 +12,7 @@ const MapComponent = lazy(() =>
   import("./components/Directions/Maps/MapComponent")
 );
 
-const EventPro = lazy(() => import("./components/Events/EventPro"));
+const EventPro = lazy(() => import("./components/Events/Events"));
 // const Dashboard = lazy(() => import("./components/Home/Dashboard"));
 
 const App = () => {
