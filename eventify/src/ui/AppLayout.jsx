@@ -6,7 +6,7 @@ import { FiSun, FiMoon } from "react-icons/fi";
 import NavBar from "../components/Home/NavBar";
 
 import GlobalStyles from "../themes/GlobalStyles";
-import { getTheme } from "../themes/themes";
+import { getTheme, themes } from "../themes/themes";
 
 const LayoutContainer = styled.div`
   min-height: 100vh;
@@ -110,7 +110,7 @@ const AppLayout = () => {
   };
 
   return (
-    <ThemeProvider theme={currentTheme}>
+    <ThemeProvider theme={themes[mode]}>
       {/* Global theme styling */}
       <GlobalStyles />
 

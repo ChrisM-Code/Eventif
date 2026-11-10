@@ -1,3 +1,5 @@
+// src/styles/GlobalStyles.js
+
 import { createGlobalStyle } from "styled-components";
 
 const GlobalStyles = createGlobalStyle`
@@ -18,16 +20,22 @@ const GlobalStyles = createGlobalStyle`
     margin: 0;
     padding: 0;
     min-height: 100vh;
+
     font-family: "Inter", "Segoe UI", Arial, sans-serif;
     font-size: 16px;
     line-height: 1.6;
-    background: ${({ theme }) => theme.background};
+
+    background-color: ${({ theme }) => theme.background};
     color: ${({ theme }) => theme.text};
-    transition: background-color 0.3s ease, color 0.3s ease;
+
+    transition:
+      background-color 0.3s ease,
+      color 0.3s ease;
   }
 
   #root {
     min-height: 100vh;
+    width: 100%;
     background: ${({ theme }) => theme.background};
     color: ${({ theme }) => theme.text};
   }
@@ -68,6 +76,8 @@ const GlobalStyles = createGlobalStyle`
       box-shadow 0.3s ease;
   }
 
+  /* Typography */
+
   h1, h2, h3, h4, h5, h6 {
     margin-top: 0;
     color: ${({ theme }) => theme.heading};
@@ -81,8 +91,16 @@ const GlobalStyles = createGlobalStyle`
     line-height: 1.7;
   }
 
+  span, label, li {
+    transition: color 0.3s ease;
+  }
+
   small {
     color: ${({ theme }) => theme.secondary};
+  }
+
+  strong {
+    color: ${({ theme }) => theme.heading};
   }
 
   a {
@@ -95,13 +113,33 @@ const GlobalStyles = createGlobalStyle`
     color: ${({ theme }) => theme.accentHover};
   }
 
+  /* Media */
+
+  img, video, svg {
+    max-width: 100%;
+  }
+
+  img {
+    display: block;
+  }
+
+  /* Buttons */
+
   button, input, textarea, select {
     font: inherit;
   }
 
   button {
     cursor: pointer;
+    color: inherit;
   }
+
+  button:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+
+  /* Main layout */
 
   .page-container {
     width: 100%;
@@ -122,6 +160,8 @@ const GlobalStyles = createGlobalStyle`
     color: ${({ theme }) => theme.text};
     transition: var(--transition-theme);
   }
+
+  /* Theme typography helpers */
 
   .theme-heading {
     color: ${({ theme }) => theme.heading};
@@ -147,6 +187,8 @@ const GlobalStyles = createGlobalStyle`
     color: ${({ theme }) => theme.inverseText};
   }
 
+  /* Cards */
+
   .theme-card {
     background: ${({ theme }) => theme.surface};
     color: ${({ theme }) => theme.text};
@@ -164,8 +206,11 @@ const GlobalStyles = createGlobalStyle`
     background: ${({ theme }) => theme.elevated};
     color: ${({ theme }) => theme.text};
     border: 1px solid ${({ theme }) => theme.border};
+    border-radius: 12px;
     transition: var(--transition-theme);
   }
+
+  /* Buttons */
 
   .theme-button {
     background: ${({ theme }) => theme.accent};
@@ -174,8 +219,7 @@ const GlobalStyles = createGlobalStyle`
     border-radius: 8px;
     padding: 10px 18px;
     font-weight: 600;
-    cursor: pointer;
-    transition: all 0.25s ease;
+    transition: var(--transition-theme);
   }
 
   .theme-button:hover {
@@ -190,14 +234,15 @@ const GlobalStyles = createGlobalStyle`
     border: 1px solid ${({ theme }) => theme.accent};
     border-radius: 8px;
     padding: 10px 18px;
-    cursor: pointer;
-    transition: all 0.25s ease;
+    transition: var(--transition-theme);
   }
 
   .theme-button-outline:hover {
     background: ${({ theme }) => theme.accent};
     color: ${({ theme }) => theme.buttonText};
   }
+
+  /* Forms */
 
   input, textarea, select, .theme-input {
     background: ${({ theme }) => theme.inputBg};
@@ -228,6 +273,8 @@ const GlobalStyles = createGlobalStyle`
     color: ${({ theme }) => theme.text};
   }
 
+  /* Borders and dividers */
+
   .theme-border {
     border: 1px solid ${({ theme }) => theme.border};
   }
@@ -241,6 +288,8 @@ const GlobalStyles = createGlobalStyle`
     border: 0;
     border-top: 1px solid ${({ theme }) => theme.border};
   }
+
+  /* Tables */
 
   table {
     width: 100%;
@@ -263,6 +312,8 @@ const GlobalStyles = createGlobalStyle`
     background: ${({ theme }) => theme.surfaceAlt};
   }
 
+  /* Modals and overlays */
+
   .theme-overlay {
     background: ${({ theme }) => theme.overlay};
   }
@@ -274,10 +325,25 @@ const GlobalStyles = createGlobalStyle`
     box-shadow: ${({ theme }) => theme.shadowHover};
   }
 
-  .text-success { color: ${({ theme }) => theme.success}; }
-  .text-warning { color: ${({ theme }) => theme.warning}; }
-  .text-danger { color: ${({ theme }) => theme.danger}; }
-  .text-info { color: ${({ theme }) => theme.info}; }
+  /* Status colors */
+
+  .text-success {
+    color: ${({ theme }) => theme.success};
+  }
+
+  .text-warning {
+    color: ${({ theme }) => theme.warning};
+  }
+
+  .text-danger {
+    color: ${({ theme }) => theme.danger};
+  }
+
+  .text-info {
+    color: ${({ theme }) => theme.info};
+  }
+
+  /* Scrollbar */
 
   ::-webkit-scrollbar {
     width: 8px;
@@ -296,6 +362,8 @@ const GlobalStyles = createGlobalStyle`
   ::-webkit-scrollbar-thumb:hover {
     background: ${({ theme }) => theme.accent};
   }
+
+  /* Accessibility */
 
   button:focus-visible,
   a:focus-visible,

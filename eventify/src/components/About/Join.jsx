@@ -1,103 +1,146 @@
+// src/components/About/Join.jsx
+
 import styled, { keyframes } from "styled-components";
 
 const bounce = keyframes`
   0%, 20%, 50%, 80%, 100% {
     transform: translateY(0);
   }
+
   40% {
-    transform: translateY(-15px);
+    transform: translateY(-8px);
   }
+
   60% {
-    transform: translateY(-10px);
+    transform: translateY(-4px);
   }
 `;
 
-const Container = styled.div`
+const Container = styled.section`
+  width: calc(100% - 40px);
+  max-width: 1200px;
+
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
+
   text-align: center;
-  margin: 2rem auto;
-  padding: 2rem;
-  max-width: auto;
-  background-color: #f9f9f9;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+  margin: 2.5rem auto;
+  padding: 3.5rem 2rem;
+
+  background: ${({ theme }) => theme.surface};
+  color: ${({ theme }) => theme.text};
+
+  border: 1px solid ${({ theme }) => theme.border};
+  border-radius: 18px;
+
+  box-shadow: ${({ theme }) => theme.shadow};
+
+  transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease,
+    box-shadow 0.3s ease;
+
+  &:hover {
+    box-shadow: ${({ theme }) => theme.shadowHover};
+  }
 
   @media (max-width: 768px) {
-    padding: 1.5rem;
-    max-width: auto;
+    width: calc(100% - 24px);
+    padding: 2.5rem 1.5rem;
+    margin: 1.5rem auto;
   }
 
   @media (max-width: 480px) {
-    padding: 1rem;
-    margin: 1rem auto;
+    padding: 2rem 1rem;
+    border-radius: 12px;
   }
 `;
 
 const Title = styled.h1`
-  font-size: 2rem;
-  color: #333;
-  margin-bottom: 1rem;
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
+  font-weight: 800;
+
+  color: ${({ theme }) => theme.heading};
+
+  margin-bottom: 1.2rem;
+  line-height: 1.3;
 
   span {
-    color: #ff4500;
+    color: ${({ theme }) => theme.accent};
+    display: inline-block;
     cursor: pointer;
+
     transition: color 0.3s ease;
 
     &:hover {
-      color: #fb923c;
+      color: ${({ theme }) => theme.accentHover};
     }
-  }
-
-  @media (max-width: 768px) {
-    font-size: 1.8rem;
-  }
-
-  @media (max-width: 480px) {
-    font-size: 1.5rem;
   }
 `;
 
 const Description = styled.p`
-  font-size: 1.2rem;
-  color: #555;
-  line-height: 1.5;
-  margin-bottom: 1.5rem;
+  width: 100%;
+  max-width: 850px;
 
-  @media (max-width: 768px) {
-    font-size: 1.1rem;
-  }
+  font-size: clamp(0.95rem, 2vw, 1.15rem);
+  line-height: 1.9;
 
-  @media (max-width: 480px) {
-    font-size: 1rem;
-  }
+  color: ${({ theme }) => theme.secondary};
+
+  margin: 0 auto 1.5rem;
 `;
 
 const List = styled.ul`
   list-style: none;
   padding: 0;
+  margin: 0;
 `;
 
 const ListItem = styled.li`
-  font-size: 1rem;
-  color: #444;
-  margin-top: 0.5rem;
+  font-size: clamp(0.9rem, 2vw, 1.05rem);
+  line-height: 1.8;
+
+  color: ${({ theme }) => theme.text};
 
   strong {
-    color: #000;
+    display: inline-block;
+    color: ${({ theme }) => theme.accent};
+    font-weight: 700;
+
+    &:hover {
+      animation: ${bounce} 0.8s ease-in-out;
+    }
   }
+`;
+
+const JoinButton = styled.a`
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-top: 1.5rem;
+  padding: 12px 25px;
+
+  background: ${({ theme }) => theme.accent};
+  color: ${({ theme }) => theme.buttonText || "#FFFFFF"};
+
+  border-radius: 8px;
+  font-weight: 700;
+  text-decoration: none;
+
+  transition: all 0.3s ease;
 
   &:hover {
-    animation: ${bounce} 1s ease-in-out;
+    background: ${({ theme }) => theme.accentHover};
+    color: ${({ theme }) => theme.buttonText || "#FFFFFF"};
+    transform: translateY(-3px);
+    box-shadow: ${({ theme }) => theme.shadowHover};
   }
 
-  @media (max-width: 768px) {
-    font-size: 0.9rem;
-  }
-
-  @media (max-width: 480px) {
-    font-size: 0.85rem;
+  &:focus-visible {
+    outline: 2px solid ${({ theme }) => theme.accent};
+    outline-offset: 4px;
   }
 `;
 
@@ -107,18 +150,22 @@ function Join() {
       <Title>
         Join the <span>Eventfy Community</span>
       </Title>
+
       <Description>
         Be part of a growing community of event enthusiasts! With Eventfy,
-        you’re not just attending events; you’re creating memories, building
+        you're not just attending events; you're creating memories, building
         networks, and enriching your life experiences.
       </Description>
+
       <List>
         <ListItem>
           <strong>
-            Let’s make every moment count. Start exploring with Eventfy today!
+            Let's make every moment count. Start exploring with Eventfy today!
           </strong>
         </ListItem>
       </List>
+
+      <JoinButton href="/events">Explore Events</JoinButton>
     </Container>
   );
 }

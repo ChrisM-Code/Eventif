@@ -2,104 +2,75 @@ import styled from "styled-components";
 import Join from "./Join";
 
 const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  margin: 1rem auto;
-  padding: 0.5rem;
-  max-width: auto;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.25rem;
+  width: min(100% - 2rem, 1200px);
+  margin: 2rem auto;
+  padding: 0;
 
   @media (min-width: 768px) {
-    flex-direction: row;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.5rem;
   }
 `;
 
-const SectionLeft = styled.section`
-  flex: 1;
-  background-color: #fef9c3;
-  padding: 2rem;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+const SectionCard = styled.section`
+  min-width: 0;
+  padding: clamp(1.25rem, 3vw, 2rem);
+  border-radius: 16px;
 
-  h1 {
-    font-size: 1.5rem;
-    color: #333;
-    margin-bottom: 1rem;
+  background: ${({ theme }) => theme.surface};
+  color: ${({ theme }) => theme.text};
+  border: 1px solid ${({ theme }) => theme.border};
+  box-shadow: ${({ theme }) => theme.shadow};
+
+  transition: background-color 0.3s ease, color 0.3s ease,
+    border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+
+  &:hover {
+    box-shadow: ${({ theme }) => theme.shadowHover};
+    transform: translateY(-3px);
+  }
+
+  h2 {
+    font-size: clamp(1.35rem, 2.5vw, 1.75rem);
+    font-weight: 700;
+    line-height: 1.3;
     text-align: center;
+    margin: 0 0 1.5rem;
+    color: ${({ theme }) => theme.heading};
 
     span {
-      color: #ff4500;
-      cursor: pointer;
+      color: ${({ theme }) => theme.accent};
       transition: color 0.3s ease;
-
-      &:hover {
-        color: #fb923c;
-      }
     }
   }
 
   ul {
-    list-style-type: disc;
-    margin-left: 1.5rem;
-
-    li {
-      font-size: 1rem;
-      color: #555;
-      line-height: 1.6;
-      margin-bottom: 0.75rem;
-
-      @media (min-width: 1024px) {
-        font-size: 1.125rem;
-      }
-
-      strong {
-        color: #333;
-      }
-    }
+    padding-left: 1.4rem;
+    margin: 0;
+    list-style: disc;
   }
-`;
 
-const SectionRight = styled.section`
-  flex: 1;
-  background-color: #e0f2fe;
-  padding: 2rem;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-
-  h1 {
-    font-size: 1.5rem;
-    color: #333;
+  li {
+    padding-left: 0.25rem;
     margin-bottom: 1rem;
-    text-align: center;
+    font-size: clamp(0.95rem, 1.5vw, 1.05rem);
+    line-height: 1.8;
+    color: ${({ theme }) => theme.secondary};
 
-    span {
-      color: #ff4500;
-      cursor: pointer;
-      transition: color 0.3s ease;
-
-      &:hover {
-        color: #fb923c;
-      }
+    &::marker {
+      color: ${({ theme }) => theme.accent};
     }
-  }
 
-  ul {
-    list-style-type: disc;
-    margin-left: 1.5rem;
+    strong {
+      color: ${({ theme }) => theme.heading};
+      font-weight: 650;
+    }
 
-    li {
-      font-size: 1rem;
-      color: #555;
-      line-height: 1.6;
-      margin-bottom: 0.75rem;
-
-      @media (min-width: 1024px) {
-        font-size: 1.125rem;
-      }
-
-      strong {
-        color: #333;
-      }
+    &:last-child {
+      margin-bottom: 0;
     }
   }
 `;
@@ -108,30 +79,34 @@ function Section() {
   return (
     <>
       <Container>
-        <SectionLeft>
-          <h1>
-            What <span>We Offer</span>{" "}
-          </h1>
+        <SectionCard>
+          <h2>
+            What <span>We Offer</span>
+          </h2>
+
           <ul>
             <li>
               <strong>Discover Events:</strong> Explore a wide range of events
               curated for different interests and locations. Use our smart
               filters to find events tailored to your preferences.
             </li>
+
             <li>
               <strong>Showcase Your Event:</strong> Are you an organizer?
               Eventfy provides an intuitive platform to list your events, reach
               a broader audience, and manage your event details with ease.
             </li>
           </ul>
-        </SectionLeft>
-        <SectionRight>
-          <h1>
+        </SectionCard>
+
+        <SectionCard>
+          <h2>
             Why Choose <span>Eventfy?</span>
-          </h1>
+          </h2>
+
           <ul>
             <li>
-              <strong>User-Friendly Interface:</strong>Navigate through events
+              <strong>User-Friendly Interface:</strong> Navigate through events
               effortlessly with our sleek and intuitive design.
             </li>
 
@@ -139,12 +114,13 @@ function Section() {
               <strong>Global Reach:</strong> Discover events happening around
               the corner or on the other side of the world.
             </li>
+
             <li>
               <strong>Community Focused:</strong> Build meaningful connections
               by attending events that matter to you.
             </li>
           </ul>
-        </SectionRight>
+        </SectionCard>
       </Container>
 
       <Join />

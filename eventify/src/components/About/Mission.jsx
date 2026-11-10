@@ -1,58 +1,87 @@
+// src/components/About/Mission.jsx
+
 import styled from "styled-components";
 import Section from "./Section";
 
-const Container = styled.div`
-  margin: 0.5rem auto;
-  padding: 1rem;
-  background: #f9f9f9;
-  border-radius: 8px;
+const Container = styled.section`
+  width: calc(100% - 40px);
+  max-width: 1200px;
 
-  @media (min-width: 768px) {
-    padding: 0.5rem;
+  margin: 1.5rem auto;
+  padding: 3rem 2rem;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  background: ${({ theme }) => theme.surface};
+  color: ${({ theme }) => theme.text};
+
+  border: 1px solid ${({ theme }) => theme.border};
+  border-radius: 16px;
+
+  box-shadow: ${({ theme }) => theme.shadow};
+
+  transition: background-color 0.3s ease, color 0.3s ease,
+    border-color 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    box-shadow: ${({ theme }) => theme.shadowHover};
   }
 
-  @media (min-width: 1024px) {
-    padding: 1rem;
+  @media (max-width: 768px) {
+    width: calc(100% - 24px);
+    padding: 2rem 1.5rem;
+    margin: 1rem auto;
+  }
+
+  @media (max-width: 480px) {
+    padding: 1.5rem 1rem;
+    border-radius: 12px;
   }
 `;
 
 const Heading = styled.h1`
-  font-size: 2rem;
-  color: #333;
+  font-size: clamp(1.7rem, 4vw, 2.4rem);
+  font-weight: 800;
+
+  color: ${({ theme }) => theme.heading};
+
   text-align: center;
-  margin-bottom: 1rem;
+  margin-bottom: 1.25rem;
 
   span {
-    color: #ff4500;
+    color: ${({ theme }) => theme.accent};
     cursor: pointer;
+
     transition: color 0.3s ease;
 
     &:hover {
-      color: #fb923c;
+      color: ${({ theme }) => theme.accentHover};
     }
-  }
-
-  @media (min-width: 768px) {
-    font-size: 1.5rem;
-  }
-
-  @media (min-width: 1024px) {
-    font-size: 2rem;
   }
 `;
 
 const Paragraph = styled.p`
-  font-size: 1rem;
-  line-height: 1.6;
-  color: #555;
+  width: 100%;
+  max-width: 900px;
+
+  font-size: clamp(1rem, 2vw, 1.15rem);
+  line-height: 1.9;
+
+  color: ${({ theme }) => theme.secondary};
   text-align: center;
 
-  @media (min-width: 768px) {
-    font-size: 1.125rem;
+  margin: 0 auto;
+
+  strong {
+    color: ${({ theme }) => theme.accent};
+    font-weight: 700;
   }
 
-  @media (min-width: 1024px) {
-    font-size: 1.25rem;
+  @media (max-width: 480px) {
+    line-height: 1.75;
   }
 `;
 
@@ -63,6 +92,7 @@ function Mission() {
         <Heading>
           Our <span>Mission</span>
         </Heading>
+
         <Paragraph>
           At <strong>Eventfy</strong>, we believe in the power of connection.
           Our mission is to bring people together by making it easy to discover
