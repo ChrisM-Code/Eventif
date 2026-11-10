@@ -4,58 +4,169 @@ import Buttons from "./Buttons";
 import MapComponent from "./Maps/MapComponent";
 import { MapContext } from "./Maps/MapContext";
 
-const Container = styled.div`
+const DirectionsPage = styled.main`
+  width: 100%;
+  min-height: 100vh;
+  padding: 2rem clamp(1rem, 4vw, 3rem) 4rem;
+
+  background: ${({ theme }) => theme.background};
+  color: ${({ theme }) => theme.text};
+
+  transition: background-color 0.3s ease, color 0.3s ease;
+`;
+
+const Container = styled.section`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: clamp(2rem, 5vw, 3.5rem) 1.5rem;
+
   text-align: center;
-  padding: 1rem;
+
+  background: ${({ theme }) => theme.surface};
+  border: 1px solid ${({ theme }) => theme.border};
+  border-radius: 20px;
+  box-shadow: ${({ theme }) => theme.shadow};
+
+  transition: background-color 0.3s ease, border-color 0.3s ease,
+    box-shadow 0.3s ease;
+
   @media (max-width: 600px) {
-    padding: 0.5rem;
+    padding: 2rem 1rem;
+    border-radius: 14px;
   }
 `;
 
 const Heading = styled.h1`
-  font-size: 2em;
-  color: #333;
+  margin: 0 0 1rem;
+
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: -1px;
+
+  color: ${({ theme }) => theme.heading};
+
   span {
-    color: #ff4500;
-    cursor: pointer;
+    color: ${({ theme }) => theme.accent};
     transition: color 0.3s ease;
-    &:hover {
-      color: #fb923c;
-    }
-  }
-  @media (max-width: 600px) {
-    font-size: 1.5em;
   }
 `;
 
 const Message = styled.p`
-  font-size: 1.2em;
-  color: #555;
-  margin-top: 0.5rem;
+  max-width: 720px;
+  margin: 0 auto;
+
+  font-size: clamp(0.95rem, 2vw, 1.1rem);
+  line-height: 1.8;
+
+  color: ${({ theme }) => theme.secondary};
+`;
+
+const ButtonsSection = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 100%;
+  max-width: 1000px;
+  margin: 1.5rem auto 2rem;
+  padding: 1.25rem;
+
+  background: ${({ theme }) => theme.surface};
+  border: 1px solid ${({ theme }) => theme.border};
+  border-radius: 16px;
+
+  transition: var(--transition-theme);
+
   @media (max-width: 600px) {
-    font-size: 1em;
+    padding: 1rem 0.75rem;
+    margin: 1rem auto 1.5rem;
+  }
+`;
+
+const MapSection = styled.section`
+  width: 100%;
+  max-width: 1200px;
+  min-height: 350px;
+  margin: 0 auto;
+  padding: 0;
+
+  background: ${({ theme }) => theme.surface};
+  border: 1px solid ${({ theme }) => theme.border};
+  border-radius: 18px;
+  box-shadow: ${({ theme }) => theme.shadow};
+  overflow: hidden;
+
+  transition: var(--transition-theme);
+
+  @media (max-width: 600px) {
+    min-height: 300px;
+    border-radius: 12px;
+  }
+`;
+
+const EmptyMap = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+
+  min-height: 300px;
+  padding: 2rem;
+
+  color: ${({ theme }) => theme.secondary};
+  text-align: center;
+
+  h3 {
+    margin: 0;
+    color: ${({ theme }) => theme.heading};
+  }
+
+  p {
+    margin: 0;
+    color: ${({ theme }) => theme.secondary};
+    font-size: 0.9rem;
   }
 `;
 
 function Directions() {
-  const { destination } = useContext(MapContext); // ✅ Get destination from context
+  const { destination } = useContext(MapContext);
 
   return (
-    <>
+    <DirectionsPage className="page-container">
       <Container>
         <Heading>
           Find Your Way <span>with Ease</span>
         </Heading>
+
         <Message>
           Stay on Eventify for the best experience. Use our real-time directions
           to get to your event hassle-free!
         </Message>
       </Container>
-      <Buttons />
 
-      {/* ✅ Show MapComponent only if a destination is set */}
-      {destination && <MapComponent />}
-    </>
+      <ButtonsSection>
+        <Buttons />
+      </ButtonsSection>
+
+      <MapSection>
+        {destination ? (
+          <MapComponent />
+        ) : (
+          <EmptyMap>
+            <h3>No destination selected</h3>
+            <p>Select an event location to view its directions on the map.</p>
+          </EmptyMap>
+        )}
+      </MapSection>
+    </DirectionsPage>
   );
 }
 
