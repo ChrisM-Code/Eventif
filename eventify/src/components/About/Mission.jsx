@@ -15,12 +15,6 @@ const Container = styled.section`
   align-items: center;
   justify-content: center;
 
-  background: ${({ theme }) => theme.surface};
-  color: ${({ theme }) => theme.text};
-
-  border: 1px solid ${({ theme }) => theme.border};
-  border-radius: 16px;
-
   box-shadow: ${({ theme }) => theme.shadow};
 
   transition: background-color 0.3s ease, color 0.3s ease,

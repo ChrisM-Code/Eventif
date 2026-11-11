@@ -1,4 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState, useContext, useMemo } from "react";
+
+import { MapContext } from "../Directions/Maps/MapContext";
+
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import {
@@ -119,6 +122,70 @@ const ModalDescription = styled.p`
   text-align: center;
 `;
 
+const InstructionIcon = styled.div`
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 1rem;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+  background: ${({ theme }) => theme.accentSoft};
+  color: ${({ theme }) => theme.accent};
+
+  svg {
+    font-size: 28px;
+  }
+`;
+
+const InstructionModalContent = styled.div`
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
+  text-align: center;
+`;
+
+const InstructionSteps = styled.div`
+  margin: 1.25rem 0;
+  padding: 1rem;
+
+  background: ${({ theme }) => theme.surfaceAlt};
+  border: 1px solid ${({ theme }) => theme.border};
+  border-radius: 12px;
+
+  text-align: left;
+
+  p {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin: 0.7rem 0;
+
+    color: ${({ theme }) => theme.text};
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+
+  span {
+    flex-shrink: 0;
+    width: 23px;
+    height: 23px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+    background: ${({ theme }) => theme.accent};
+    color: white;
+
+    font-size: 0.75rem;
+    font-weight: 700;
+  }
+`;
+
 const EventOption = styled.button`
   display: flex;
   align-items: center;
@@ -234,52 +301,86 @@ const StyledMap = styled(MapContainer)`
   }
 `;
 
-const Buttons = ({ events = [] }) => {
+const Buttons = ({
+  events = [],
+  eventsLoading = false,
+  eventsError = null,
+  onRetryEvents,
+}) => {
   const navigate = useNavigate();
 
   const [showModal, setShowModal] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState(null);
-  const [userLocation, setUserLocation] = useState(null);
 
-  // Get the user's current location
-  useEffect(() => {
-    if (!navigator.geolocation) return;
+  const {
+    userLocation,
+    locationLoading,
+    locationError,
+    destination,
+    updateDestination,
+  } = useContext(MapContext);
 
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        setUserLocation({
-          lat: position.coords.latitude,
-          lng: position.coords.longitude,
-        });
-      },
-      (error) => {
-        console.warn("Unable to retrieve location:", error.message);
-      },
-      {
-        enableHighAccuracy: true,
-        timeout: 10000,
-        maximumAge: 60000,
-      }
-    );
-  }, []);
+  // Normalize event coordinates.
+  const getEventCoordinates = (event) => {
+    const lat = Number(event.lat ?? event.latitude);
+    const lng = Number(event.lng ?? event.longitude);
 
-  const handleSelectEvent = (event) => {
-    setSelectedEvent(event);
-    setShowModal(false);
+    if (
+      (event.lat == null && event.latitude == null) ||
+      (event.lng == null && event.longitude == null) ||
+      !Number.isFinite(lat) ||
+      !Number.isFinite(lng) ||
+      lat < -90 ||
+      lat > 90 ||
+      lng < -180 ||
+      lng > 180
+    ) {
+      return null;
+    }
+
+    return [lat, lng];
   };
 
+  // Prepare available events without making another API request.
+  const availableEvents = useMemo(() => {
+    if (!Array.isArray(events)) return [];
+
+    return events.filter(
+      (event) => event && (event.id || event._id) && event.title
+    );
+  }, [events]);
+
+  // Open directions.
   const handleDirectionsClick = () => {
-    if (events.length > 0) {
-      setShowModal(true);
+    setSelectedEvent(null);
+    updateDestination(null);
+    setShowModal(true);
+  };
+
+  // Select an event immediately from the loaded event list.
+  const handleSelectEvent = (event) => {
+    if (!event) return;
+
+    const coordinates = getEventCoordinates(event);
+
+    setSelectedEvent(event);
+    setShowModal(false);
+
+    if (coordinates) {
+      updateDestination(coordinates);
     } else {
-      navigate("/directions");
+      updateDestination(null);
     }
   };
 
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
+
   const hasValidCoordinates =
-    selectedEvent &&
-    Number.isFinite(Number(selectedEvent.lat)) &&
-    Number.isFinite(Number(selectedEvent.lng));
+    selectedEvent && getEventCoordinates(selectedEvent);
+
+  const mapCenter = destination || userLocation || hasValidCoordinates;
 
   return (
     <>
@@ -297,41 +398,111 @@ const Buttons = ({ events = [] }) => {
 
       {/* Event selection modal */}
       {showModal && (
-        <Modal onClose={() => setShowModal(false)}>
-          <ModalHeading>Select an Event</ModalHeading>
+        <Modal onClose={handleCloseModal}>
+          {eventsLoading ? (
+            <>
+              <ModalHeading>Loading Events</ModalHeading>
+              <ModalDescription>
+                Please wait while we retrieve available events...
+              </ModalDescription>
 
-          <ModalDescription>
-            Choose an event to view its location and available directions.
-          </ModalDescription>
+              <EmptyState>
+                <p>Fetching event information. Please wait.</p>
+              </EmptyState>
+            </>
+          ) : eventsError ? (
+            <>
+              <ModalHeading>Unable to Load Events</ModalHeading>
 
-          {events.length === 0 ? (
-            <EmptyState>
-              <p>No events are currently available for navigation.</p>
-            </EmptyState>
-          ) : (
-            <EventList>
-              {events.map((event, index) => (
-                <EventOption
-                  key={event.id || `${event.title}-${index}`}
-                  onClick={() => handleSelectEvent(event)}
+              <ModalDescription>
+                We couldn't retrieve the events at the moment. Please check your
+                connection and try again.
+              </ModalDescription>
+
+              <ModalButtonGroup>
+                <StyledButton onClick={onRetryEvents} disabled={!onRetryEvents}>
+                  Retry
+                </StyledButton>
+
+                <StyledButton onClick={handleCloseModal}>Close</StyledButton>
+              </ModalButtonGroup>
+            </>
+          ) : availableEvents.length === 0 ? (
+            <InstructionModalContent>
+              <InstructionIcon>
+                <FaDirections />
+              </InstructionIcon>
+
+              <ModalHeading>View Event Directions</ModalHeading>
+
+              <ModalDescription>
+                You need to select an event before viewing its directions.
+                Browse available events first.
+              </ModalDescription>
+
+              <InstructionSteps>
+                <p>
+                  <span>1</span> Browse available events.
+                </p>
+                <p>
+                  <span>2</span> Select your preferred event.
+                </p>
+                <p>
+                  <span>3</span> View its location on the map.
+                </p>
+              </InstructionSteps>
+
+              <ModalButtonGroup>
+                <StyledButton
+                  onClick={() => {
+                    setShowModal(false);
+                    navigate("/events");
+                  }}
                 >
-                  <div>
-                    <strong>{event.title}</strong>
-                    <span>{event.location}</span>
-                  </div>
+                  <FaCalendarAlt />
+                  Browse Events
+                </StyledButton>
+              </ModalButtonGroup>
+            </InstructionModalContent>
+          ) : (
+            <>
+              <ModalHeading>Select an Event</ModalHeading>
 
-                  <FaMapMarkerAlt />
-                </EventOption>
-              ))}
-            </EventList>
+              <ModalDescription>
+                Choose an event to view its location and directions.
+              </ModalDescription>
+
+              <EventList>
+                {availableEvents.map((event) => (
+                  <EventOption
+                    key={event.id || event._id}
+                    onClick={() => handleSelectEvent(event)}
+                  >
+                    <div>
+                      <strong>{event.title}</strong>
+                      <span>{event.location || "Location not specified"}</span>
+                    </div>
+
+                    <FaMapMarkerAlt />
+                  </EventOption>
+                ))}
+              </EventList>
+
+              <ModalButtonGroup>
+                <StyledButton onClick={handleCloseModal}>Cancel</StyledButton>
+
+                <StyledButton
+                  onClick={() => {
+                    setShowModal(false);
+                    navigate("/events");
+                  }}
+                >
+                  <FaCalendarAlt />
+                  All Events
+                </StyledButton>
+              </ModalButtonGroup>
+            </>
           )}
-
-          <ModalButtonGroup>
-            <StyledButton onClick={() => navigate("/events")}>
-              <FaBackspace />
-              Back to Events
-            </StyledButton>
-          </ModalButtonGroup>
         </Modal>
       )}
 
@@ -342,40 +513,53 @@ const Buttons = ({ events = [] }) => {
             Directions to: <em>{selectedEvent.title}</em>
           </h3>
 
-          {!userLocation ? (
+          {!hasValidCoordinates ? (
             <EmptyState>
               <p>
-                Your current location is unavailable. Allow location access in
-                your browser to display your position on the map.
-              </p>
-            </EmptyState>
-          ) : !hasValidCoordinates ? (
-            <EmptyState>
-              <p>
-                Coordinates are not available for this event. Please provide
-                valid latitude and longitude values.
+                This event does not have valid map coordinates. Please select
+                another event or update its location.
               </p>
             </EmptyState>
           ) : (
-            <StyledMap center={userLocation} zoom={13} scrollWheelZoom>
-              <TileLayer
-                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-              />
+            <>
+              {locationLoading && (
+                <ModalDescription>
+                  Loading your current location...
+                </ModalDescription>
+              )}
 
-              <Marker position={[userLocation.lat, userLocation.lng]}>
-                <Popup>Your Current Location</Popup>
-              </Marker>
+              {!userLocation && !locationLoading && (
+                <EmptyState>
+                  <p>
+                    {locationError
+                      ? "Your current location is unavailable."
+                      : "Your current location is unavailable."}
+                  </p>
+                </EmptyState>
+              )}
 
-              <Marker
-                position={[
-                  Number(selectedEvent.lat),
-                  Number(selectedEvent.lng),
-                ]}
+              <StyledMap
+                key={selectedEvent.id || selectedEvent._id}
+                center={mapCenter}
+                zoom={13}
+                scrollWheelZoom
               >
-                <Popup>{selectedEvent.title}</Popup>
-              </Marker>
-            </StyledMap>
+                <TileLayer
+                  attribution="&copy; OpenStreetMap contributors"
+                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                />
+
+                {userLocation && (
+                  <Marker position={userLocation}>
+                    <Popup>Your Current Location</Popup>
+                  </Marker>
+                )}
+
+                <Marker position={hasValidCoordinates}>
+                  <Popup>{selectedEvent.title}</Popup>
+                </Marker>
+              </StyledMap>
+            </>
           )}
         </MapSection>
       )}

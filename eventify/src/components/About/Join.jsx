@@ -1,6 +1,5 @@
-// src/components/About/Join.jsx
-
 import styled, { keyframes } from "styled-components";
+import { useNavigate } from "react-router-dom";
 
 const bounce = keyframes`
   0%, 20%, 50%, 80%, 100% {
@@ -19,22 +18,13 @@ const bounce = keyframes`
 const Container = styled.section`
   width: calc(100% - 40px);
   max-width: 1200px;
-
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-
   text-align: center;
-
   margin: 2.5rem auto;
   padding: 3.5rem 2rem;
-
-  background: ${({ theme }) => theme.surface};
-  color: ${({ theme }) => theme.text};
-
-  border: 1px solid ${({ theme }) => theme.border};
-  border-radius: 18px;
 
   box-shadow: ${({ theme }) => theme.shadow};
 
@@ -60,9 +50,7 @@ const Container = styled.section`
 const Title = styled.h1`
   font-size: clamp(1.5rem, 4vw, 2.5rem);
   font-weight: 800;
-
   color: ${({ theme }) => theme.heading};
-
   margin-bottom: 1.2rem;
   line-height: 1.3;
 
@@ -70,7 +58,6 @@ const Title = styled.h1`
     color: ${({ theme }) => theme.accent};
     display: inline-block;
     cursor: pointer;
-
     transition: color 0.3s ease;
 
     &:hover {
@@ -82,12 +69,9 @@ const Title = styled.h1`
 const Description = styled.p`
   width: 100%;
   max-width: 850px;
-
   font-size: clamp(0.95rem, 2vw, 1.15rem);
   line-height: 1.9;
-
   color: ${({ theme }) => theme.secondary};
-
   margin: 0 auto 1.5rem;
 `;
 
@@ -100,7 +84,6 @@ const List = styled.ul`
 const ListItem = styled.li`
   font-size: clamp(0.9rem, 2vw, 1.05rem);
   line-height: 1.8;
-
   color: ${({ theme }) => theme.text};
 
   strong {
@@ -114,7 +97,7 @@ const ListItem = styled.li`
   }
 `;
 
-const JoinButton = styled.a`
+const JoinButton = styled.button`
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -125,9 +108,11 @@ const JoinButton = styled.a`
   background: ${({ theme }) => theme.accent};
   color: ${({ theme }) => theme.buttonText || "#FFFFFF"};
 
+  border: none;
   border-radius: 8px;
   font-weight: 700;
-  text-decoration: none;
+  font-size: 1rem;
+  cursor: pointer;
 
   transition: all 0.3s ease;
 
@@ -142,9 +127,19 @@ const JoinButton = styled.a`
     outline: 2px solid ${({ theme }) => theme.accent};
     outline-offset: 4px;
   }
+
+  &:active {
+    transform: translateY(-1px);
+  }
 `;
 
 function Join() {
+  const navigate = useNavigate();
+
+  const handleExploreEvents = () => {
+    navigate("/events");
+  };
+
   return (
     <Container>
       <Title>
@@ -165,7 +160,9 @@ function Join() {
         </ListItem>
       </List>
 
-      <JoinButton href="/events">Explore Events</JoinButton>
+      <JoinButton type="button" onClick={handleExploreEvents}>
+        Explore Events
+      </JoinButton>
     </Container>
   );
 }

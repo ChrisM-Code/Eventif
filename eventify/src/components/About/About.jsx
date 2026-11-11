@@ -9,12 +9,6 @@ const Container = styled.section`
   margin: 2rem auto;
   padding: 3rem 2rem;
 
-  background: ${({ theme }) => theme.surface};
-  color: ${({ theme }) => theme.text};
-
-  border: 1px solid ${({ theme }) => theme.border};
-  border-radius: 16px;
-
   box-shadow: ${({ theme }) => theme.shadow};
 
   transition: all 0.3s ease;

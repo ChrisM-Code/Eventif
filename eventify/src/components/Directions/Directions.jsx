@@ -28,11 +28,6 @@ const Container = styled.section`
 
   text-align: center;
 
-  background: ${({ theme }) => theme.surface};
-  border: 1px solid ${({ theme }) => theme.border};
-  border-radius: 20px;
-  box-shadow: ${({ theme }) => theme.shadow};
-
   transition: background-color 0.3s ease, border-color 0.3s ease,
     box-shadow 0.3s ease;
 
@@ -76,11 +71,6 @@ const ButtonsSection = styled.div`
   width: 100%;
   max-width: 1000px;
   margin: 1.5rem auto 2rem;
-  padding: 1.25rem;
-
-  background: ${({ theme }) => theme.surface};
-  border: 1px solid ${({ theme }) => theme.border};
-  border-radius: 16px;
 
   transition: var(--transition-theme);
 
@@ -93,7 +83,7 @@ const ButtonsSection = styled.div`
 const MapSection = styled.section`
   width: 100%;
   max-width: 1200px;
-  min-height: 350px;
+  min-height: 450px;
   margin: 0 auto;
   padding: 0;
 
@@ -150,11 +140,10 @@ function Directions() {
           Stay on Eventify for the best experience. Use our real-time directions
           to get to your event hassle-free!
         </Message>
+        <ButtonsSection>
+          <Buttons />
+        </ButtonsSection>
       </Container>
-
-      <ButtonsSection>
-        <Buttons />
-      </ButtonsSection>
 
       <MapSection>
         {destination ? (

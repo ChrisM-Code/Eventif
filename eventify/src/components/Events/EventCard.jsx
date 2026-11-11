@@ -170,7 +170,7 @@ function EventCard({ event }) {
   const handleLocationClick = () => {
     updateDestination(event.location);
 
-    navigate("/directions", {
+    navigate("/map", {
       state: { location: event.location },
     });
   };

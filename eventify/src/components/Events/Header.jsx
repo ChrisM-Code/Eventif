@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import EventPro from "./EventPro";
+
 const HeaderContainer = styled.header`
   position: relative;
   display: block;
@@ -9,10 +10,7 @@ const HeaderContainer = styled.header`
   padding: clamp(3rem, 7vw, 5rem) 1.25rem 2.5rem;
   text-align: center;
 
-  background: ${({ theme }) => theme.surface};
   color: ${({ theme }) => theme.text};
-
-  border-bottom: 1px solid ${({ theme }) => theme.border};
 
   transition: background-color 0.3s ease, color 0.3s ease,
     border-color 0.3s ease;

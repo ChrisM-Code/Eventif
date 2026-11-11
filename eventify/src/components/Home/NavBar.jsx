@@ -259,7 +259,7 @@ function NavBar() {
     },
     {
       label: "Directions",
-      path: "/map",
+      path: "/directions",
       icon: <FiMapPin />,
     },
   ];
@@ -286,11 +286,6 @@ function NavBar() {
         </NavLinks>
 
         <NavActions>
-          <ExploreButton to="/events">
-            Explore Events
-            <FiArrowUpRight />
-          </ExploreButton>
-
           <MobileMenuButton
             type="button"
             onClick={() => setMenuOpen((previous) => !previous)}
